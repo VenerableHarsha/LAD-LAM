@@ -479,6 +479,126 @@ rectangle_solid = rectangle_face.extrude(Base.Vector(0, 0, height)) #This is how
 
 ### [User message]
 The code I worked on is:
+```python
+import FreeCAD as App
+import Part
+
+doc = App.newDocument("MySphere")
+
+sphere = Part.makeSphere(5)
+doc.addObject("Part::Feature", "Sphere").Shape = sphere
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewAxometric()
+Gui.SendMsgToActiveView("ViewFit")
+```
+
+The error I encountered is: 
+``` Traceback (most recent call last):
+  File "/home/user/scripts/macro.FCMacro", line 5, in <module>
+    sphere = Part.makeSphere(5)
+<class 'AttributeError'>: module 'Part' has no attribute 'makeSphere'
+```
+
+
+### [Answer]
+```
+import FreeCAD as App
+import Part
+
+doc = App.newDocument("MySphere")
+
+sphere = Part.makeSphere(radius=5)  # Corrected method call
+doc.addObject("Part::Feature", "Sphere").Shape = sphere
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewAxometric()
+Gui.SendMsgToActiveView("ViewFit")
+
+### [User message]
+
+The code I worked on is:
+```
+import FreeCAD as App
+import Part
+
+doc = App.newDocument("MyCylinder")
+
+cylinder = Part.makeCylinder(5, 10)
+doc.addObject("Part::Feature", "Cylinder").Shape = cylinder
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewAxometric()
+Gui.SendMsgToActiveView("ViewFit")
+```
+
+The error I encountered is:
+```
+Traceback (most recent call last):
+  File "/home/user/scripts/macro.FCMacro", line 5, in <module>
+    cylinder = Part.makeCylinder(5, 10)
+<class 'TypeError'>: makeCylinder() takes no positional arguments
+```
+
+### [Answer]
+```
+import FreeCAD as App
+import Part
+
+doc = App.newDocument("MyCylinder")
+
+cylinder = Part.makeCylinder(radius=5, height=10)  # Fixed by using keyword arguments
+doc.addObject("Part::Feature", "Cylinder").Shape = cylinder
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewAxometric()
+Gui.SendMsgToActiveView("ViewFit")
+```
+
+### [User message]
+The code I worked on is:
+``` import FreeCAD as App
+import Part
+
+doc = App.newDocument("CutExample")
+
+box1 = Part.makeBox(10, 10, 10)
+box2 = Part.makeBox(5, 5, 5)
+box2.translate(App.Vector(2, 2, 2))
+
+cut_result = box1.cut(box2)
+
+doc.addObject("Part::Feature", "CutResult").Shape = cut_result
+App.ActiveDocument.recompute()
+Gui.activeDocument().activeView().viewAxometric()
+Gui.SendMsgToActiveView("ViewFit")
+```
+
+The error I encountered is:
+``` Traceback (most recent call last):
+  File "/home/user/scripts/macro.FCMacro", line 9, in <module>
+    cut_result = box1.cut(box2)
+<class 'AttributeError'>: 'NoneType' object has no attribute 'cut'
+```
+
+### [Answer]
+
+import FreeCAD as App
+import Part
+
+doc = App.newDocument("CutExample")
+
+box1 = Part.makeBox(10, 10, 10)
+box2 = Part.makeBox(5, 5, 5)
+box2.translate(App.Vector(2, 2, 2))
+
+if box1 and box2:  # Ensure objects are valid before performing boolean operation
+    cut_result = box1.cut(box2)
+    doc.addObject("Part::Feature", "CutResult").Shape = cut_result
+    App.ActiveDocument.recompute()
+    Gui.activeDocument().activeView().viewAxometric()
+    Gui.SendMsgToActiveView("ViewFit")
+else:
+    print("Error: One of the objects was not created correctly.")
+
+### [User message]
+The code I worked on is:
 ``` python
 {
     generated_code
