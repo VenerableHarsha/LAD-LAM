@@ -1,8 +1,18 @@
-# Use a pipeline as a high-level helper
-from transformers import pipeline
+from ollama import chat
+from ollama import ChatResponse
 
-messages = [
-    {"role": "user", "content": "Who are you?"},
-]
-pipe = pipeline("image-text-to-text", model="llava-hf/llava-v1.6-mistral-7b-hf")
-pipe(messages)
+def retreive_entity():
+    response: ChatResponse = chat(model='llama3.2:1b', messages=[
+    {
+        'role': 'user',
+        # 'content': f"""Write python code to generate a solid sphere in freeCAD software.
+        'content': f"""What is photosynthesis?
+        """
+    },
+    ])
+    # print(response['message']['content'])
+    # or access fields directly from the response object
+    r = response.message.content
+    return r
+
+print(retreive_entity()+'some special thing')
